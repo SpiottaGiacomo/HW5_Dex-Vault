@@ -48,19 +48,19 @@ it('system setup', async function () {
   expect(await treasury.getAddress()).to.be.not.equal(ethers.ZeroAddress);
   expect(await treasury.getAddress()).to.match(/0x[0-9a-fA-F]{40}/);
 
-  try {
-    const decimals = await pcContract.getPriceDecimals();
-    console.log("ETH/USD decimals: " + decimals);
-  } catch (error) {
-    console.error("Failed to get ETH/USD decimals", error);
-  }
-}
-)
+  decimals = await pcContract.getPriceDecimals();
+  console.log("ETH/USD decimals: " + decimals);
+})
 
 
 it("users change ethers for tokens in simple DEX", async function() {
-  lastPrice = 325925282145
-  console.log(lastPrice / 10**8)
+  try {
+    const ethUsdPrice = await pcContract.getLatestPrice();
+    const formattedEthUsdPrice = ethers.formatUnits(ethUsdPrice, await pcContract.getPriceDecimals()); // Correct format for Chainlink price feeds
+    console.log(`Latest ETH/USD Price: ${formattedEthUsdPrice}`);
+  } catch (error) {
+    console.log("Error while getting ETH/USD price:", error.message);
+  }
   console.log("ETH/USD decimals: " + await simpleDex.ethPriceDecimals())
   console.log(await simpleDex.getAddress());
   await simpleDex.connect(testOwner).setTreasury(await treasury.getAddress())

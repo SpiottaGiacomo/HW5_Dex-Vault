@@ -10,13 +10,18 @@ contract PriceConsumer{
         priceFeed = AggregatorV3Interface(clOracleAddress);
     }
 
-    function getLatestPrice() public view returns (int) {
-        (/* uint80 roundID */, int price, /*uint startedAt */, /*uint timeStamp */, /*uint80 answeredInRound*/) = priceFeed.latestRoundData();
-        return 325925282145;
-    }
+    function getLatestPrice() public view returns (int256) {
+    ( /*uint80 roundID*/,
+      int256 price,
+      /*uint256 startedAt*/,
+      /*uint256 timeStamp*/,
+      /*uint80 answeredInRound*/ 
+    )= priceFeed.latestRoundData();
+    return price;
+  }
 
-    function getPriceDecimals() public view returns (uint){
-        return 8;
-    }
+    function getPriceDecimals() public view returns (uint) {
+    return uint(priceFeed.decimals());
+  }
 }
 
